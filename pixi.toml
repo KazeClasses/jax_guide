@@ -18,3 +18,4 @@ equinox = ">=0.11.7, <0.12"
 diffrax = ">=0.6.0, <0.7"
 ipython = ">=8.27.0, <8.28"
 jax = {version = ">=0.4.33, <0.5", extras = ["cuda"]}
+optax = ">=0.2.3, <0.3"
