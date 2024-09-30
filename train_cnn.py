@@ -69,3 +69,4 @@ def train(
     return model
 
 trained_model = train(model, dataset, 4, 1e-3, 300, jax.random.PRNGKey(0))
+result = trained_model(dataset[0][0])
