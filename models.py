@@ -29,8 +29,8 @@ class CNNEmulator(eqx.Module):
     def rollout(self, x: Float[Array, "2 n_res n_res"], n_step: Int) -> Float[Array, "n_step n_res n_res"]:
         result = [x]
         for i in range(n_step):
-            x = self(x)
-            result.append(x)
+            x = jnp.concatenate([x[1:], self(x)], axis=0)
+            result.append(x[1:])
         return jnp.stack(result)
 
 class latent_term(eqx.Module):
