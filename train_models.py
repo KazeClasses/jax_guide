@@ -52,7 +52,9 @@ pendulum = PendulumSimulation(image_size=IMAGE_SIZE)
 dataset = pendulum.generate_dataset(5, 9.8, 1.0)
 
 CNNmodel = CNNEmulator(jax.random.PRNGKey(0))
-LatentODE_model = LatentODE(jax.random.PRNGKey(0), IMAGE_SIZE)
+trained_CNNmodel = train(CNNmodel, dataset, 4, 1e-3, 300, jax.random.PRNGKey(1))
+CNNresult = trained_CNNmodel.rollout(dataset[0][0])
 
-trained_CNNmodel = train(CNNmodel, dataset, 4, 1e-3, 300, jax.random.PRNGKey(0))
-result = trained_CNNmodel(dataset[0][0])
+LatentODE_model = LatentODE(jax.random.PRNGKey(2), IMAGE_SIZE)
+trained_LatentODE_model = train(LatentODE_model, dataset, 4, 1e-3, 300, jax.random.PRNGKey(3))
+LatentODE_result = trained_LatentODE_model(dataset[0][0])

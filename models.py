@@ -26,6 +26,12 @@ class CNNEmulator(eqx.Module):
             x = layer(x)
         return x
     
+    def rollout(self, x: Float[Array, "2 n_res n_res"], n_step: Int) -> Float[Array, "n_step n_res n_res"]:
+        result = [x]
+        for i in range(n_step):
+            x = self(x)
+            result.append(x)
+        return jnp.stack(result)
 
 class latent_term(eqx.Module):
     scale: jnp.ndarray
@@ -102,3 +108,4 @@ class LatentODE(eqx.Module):
         z = self.decoder[-2](z)
         z = self.decoder[-1](z)
         return z
+    
