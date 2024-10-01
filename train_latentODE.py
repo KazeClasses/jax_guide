@@ -78,9 +78,7 @@ class LatentODE(eqx.Module):
         for i in range(self.n_layers):
             z = self.decoder[2*i](z)
             z = self.decoder[1 + 2*i](z)
-            # z = jax.vmap(jax.image.resize, in_axes=(0, None, None))(z, (z.shape[1]*2, z.shape[2]*2), 'linear')
         z = self.decoder[-2](z)
-        # z = jax.vmap(jax.image.resize, in_axes=(0, None, None))(z, (z.shape[1]*2, z.shape[2]*2), 'linear')
         z = self.decoder[-1](z)
         return z
 
