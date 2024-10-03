@@ -3,11 +3,13 @@ import jax.numpy as jnp
 import equinox as eqx
 from jaxtyping import Float, Array, Int, PRNGKeyArray
 from generate_data import PendulumSimulation
-from models import CNNEmulator
+import optax
+from models import CNNEmulator, LatentODE
 
 
 
 def loss_fn(model, batch):
+    # Fill
     raise NotImplementedError
 
 def train(
@@ -18,7 +20,25 @@ def train(
     num_epochs: Int,
     key: PRNGKeyArray,
 ) -> CNNEmulator:
-    raise NotImplementedError 
+    
+    optimizer = optax.adamw(learning_rate)
+    opt_state = optimizer.init(eqx.filter(model, eqx.is_array))
+
+    @eqx.filter_jit
+    def make_step(
+        model: CNNEmulator,
+        opt_state: optax.OptState,
+        batch: Float[Array, " n_samples n_res n_res"],
+    ) -> tuple:
+        loss, grads = eqx.filter_value_and_grad(#Fill here)
+        updates, opt_state = optimizer.update(#Fill here)
+        model = eqx.apply_updates(model, updates)
+        return model, opt_state, loss
+    
+    print("Training...")
+    # Write your training loop here
+    return model
+
 IMAGE_SIZE = 64
 
 pendulum = PendulumSimulation(image_size=IMAGE_SIZE)
